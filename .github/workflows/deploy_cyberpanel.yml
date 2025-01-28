@@ -1,0 +1,27 @@
+name: Deploy CyberPanel
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Manual trigger ke liye
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # GitHub Actions ka default Ubuntu runner
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Update and Install Required Tools
+        run: |
+          sudo apt update && sudo apt upgrade -y
+          sudo apt install curl -y
+
+      - name: Install CyberPanel
+        run: |
+          curl -s https://cyberpanel.net/install.sh | sudo bash
+
+      - name: Check CyberPanel Status
+        run: |
+          sudo systemctl status lscpd
